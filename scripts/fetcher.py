@@ -10,6 +10,7 @@ class Fetcher:
     def get_page_html(self, url):
         try:
             self.driver.get(url)
+            self.driver.refresh()
             inner_html = self.driver.execute_script(
                 "return document.getElementsByTagName('html')[0].innerHTML")
             return inner_html

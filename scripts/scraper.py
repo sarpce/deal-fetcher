@@ -92,6 +92,7 @@ class Scraper:
         keyword = keyword.lower()
         if keyword in ["rtx 4060 ti 16gb", "rtx 4060 ti 8gb"]:
             keyword = "rtx 4060 ti"
+        keyword = keyword+' '
         data = self.parse_html(html)
         if store == "mindstar":
             price = self.extract_price_mindstar(data, keyword)
