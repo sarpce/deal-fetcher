@@ -19,6 +19,11 @@ class Scraper:
         euro_price = float(cleaned_price.replace('.', '').replace(',', '.'))
         return int(euro_price)
 
+    def clean_price_geizhals(self, price_str):
+        cleaned_price = re.sub(r'[^\d,]', '', price_str)
+        euro_price = float(cleaned_price.replace(',', '.'))
+        return int(euro_price)
+
     def extract_price_mindstar(self, data, keyword):
         lowest_price = None
         items = data.find_all('p', class_='ms_prodname',
@@ -40,7 +45,25 @@ class Scraper:
         return lowest_price
 
     def extract_price_geizhals(self, data, keyword):
-        pass
+        lowest_price = None
+        items = data.find_all('span', text=lambda text: text and keyword in text.lower())
+
+        if not items:
+            return None
+
+        for item in items:
+            parent = item.find_parent('a', class_='productlist__link')
+            if not parent:
+                continue
+            grandparent = parent.find_parent('h3').find_parent('div').find_parent('div')
+            if not grandparent:
+                continue
+            price_span = grandparent.find('span', class_='gh_price').find('span', class_='notrans')
+            if price_span:
+                current_price = self.clean_price_geizhals(price_span.text)
+                if lowest_price is None or current_price < lowest_price:
+                    lowest_price = current_price
+        return lowest_price
 
     def extract_price_mydealz(self, data, keyword):
         lowest_price = None
@@ -67,9 +90,11 @@ class Scraper:
         data = self.parse_html(html)
         if store == "mindstar":
             price = self.extract_price_mindstar(data, keyword)
-        if store == "geizhals":
+        elif store == "geizhals":
             price = self.extract_price_geizhals(data, keyword)
-        if store == "mydealz":
+        elif store == "mydealz":
             price = self.extract_price_mydealz(data, keyword)
+        else:
+            price = None
 
         return price
