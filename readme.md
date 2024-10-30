@@ -1,5 +1,3 @@
-Currrently only working for mindstar. Mydealz and geizhals implementation soon™
-
 ## Setup
 
 1. **Clone the repository:**
@@ -51,11 +49,6 @@ Currrently only working for mindstar. Mydealz and geizhals implementation soon�
 3. **See the results:**
 
     Open up prices.html, see the retrieved prices and access the links.<br>  
-    ![](https://imgur.com/zoWe1rq.png)<br>
+    ![](https://i.imgur.com/QZONbSQ.png)<br>
     
 ## Notes
-
-<details>
-<summary>😊</summary>
-This project is dedicated to Ayten Seyfioglu
-</details>
