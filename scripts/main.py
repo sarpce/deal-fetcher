@@ -1,21 +1,28 @@
 import fetcher
 import scraper
 import link_handler
-
-ALL_GPUS = ["RTX 4090", "RTX 4080 Super", "RTX 4080", "RTX 4070 Ti Super", "RTX 4070 Ti", "RTX 4070 Super", "RTX 4070",
-            "RTX 4060 Ti 16GB", "RTX 4060 Ti 8GB", "RX 7900 XTX", "RX 7900 XT", "RX 7900 GRE", "RX 7800 XT", "RX 7700 XT"]
-CHOSEN = ['RTX 4080 Super']
-ALL_STORES = ['geizhals', 'mydealz', 'mindstar']
-STORES = ['geizhals', 'mydealz', 'mindstar']
+import json
 
 
 class Main:
     def __init__(self):
+        self.read_choices()
         self.fetcher = fetcher.Fetcher()
-        self.link_handler = link_handler.LinkHandler(CHOSEN)
+        self.link_handler = link_handler.LinkHandler(self.chosen_gpus)
         self.links = self.link_handler.get_all_links()
 
         self.prices = {}
+
+    def read_choices(self):
+        with open('../data/choices.json', 'r') as file:
+            choices = json.load(file)
+
+        chosen_gpus = [
+            gpu for gpu, selected in choices['gpus'].items() if selected.lower() == 'yes']
+        chosen_stores = [store for store, selected in choices['stores'].items(
+        ) if selected.lower() == 'yes']
+        self.chosen_gpus = chosen_gpus
+        self.chosen_stores = chosen_stores
 
     def handle_for_mindstar(self, keywords):
         print("Fetching data from mindstar")
@@ -55,10 +62,10 @@ class Main:
             file.write('</body></html>')
 
     def run(self):
-        if 'mindstar' in STORES:
-            self.handle_for_mindstar(CHOSEN)
-        for keyword in CHOSEN:
-            for store in [s for s in STORES if s != 'mindstar']:
+        if 'mindstar' in self.chosen_stores:
+            self.handle_for_mindstar(self.chosen_gpus)
+        for keyword in self.chosen_gpus:
+            for store in [s for s in self.chosen_stores if s != 'mindstar']:
                 self.handle_for_store(keyword, store)
 
         self.print_prices()
