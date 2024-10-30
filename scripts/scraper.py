@@ -14,6 +14,11 @@ class Scraper:
         euro_price = float(cleaned_price.replace(',', '.'))
         return int(euro_price)
 
+    def clean_price_mydealz(self, price_str):
+        cleaned_price = re.sub(r'[^\d,]', '', price_str)
+        euro_price = float(cleaned_price.replace('.', '').replace(',', '.'))
+        return int(euro_price)
+
     def extract_price_mindstar(self, data, keyword):
         lowest_price = None
         items = data.find_all('p', class_='ms_prodname',
@@ -21,7 +26,7 @@ class Scraper:
 
         if not items:
             return None
-        i = 0
+
         for item in items:
             parent_html = str(item.find_parent())
             if not parent_html:
@@ -38,7 +43,24 @@ class Scraper:
         pass
 
     def extract_price_mydealz(self, data, keyword):
-        pass
+        lowest_price = None
+        items = data.find_all('a', class_='js-thread-title',
+                              text=lambda text: text and keyword in text.lower())
+
+        if not items:
+            return None
+
+        for item in items:
+            parent_html = str(item.find_parent().find_parent())
+            if not parent_html:
+                continue
+            parent_soup = self.parse_html(parent_html)
+            price_span = parent_soup.find('span', class_='thread-price')
+            if price_span:
+                current_price = self.clean_price_mydealz(price_span.text)
+                if lowest_price is None or current_price < lowest_price:
+                    lowest_price = current_price
+        return lowest_price
 
     def get_lowest_price(self, keyword, store, html):
         keyword = keyword.lower()

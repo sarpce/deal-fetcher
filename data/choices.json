@@ -1,16 +1,16 @@
 {
     "gpus": {
         "RTX 4090": "no",
-        "RTX 4080 Super": "no",
+        "RTX 4080 Super": "yes",
         "RTX 4080": "no",
-        "RTX 4070 Ti Super": "no",
-        "RTX 4070 Ti": "no",
-        "RTX 4070 Super": "no",
-        "RTX 4070": "yes",
+        "RTX 4070 Ti Super": "yes",
+        "RTX 4070 Ti": "yes",
+        "RTX 4070 Super": "yes",
+        "RTX 4070": "no",
         "RTX 4060 Ti 16GB": "no",
         "RTX 4060 Ti 8GB": "no",
-        "RX 7900 XTX": "no",
-        "RX 7900 XT": "no",
+        "RX 7900 XTX": "yes",
+        "RX 7900 XT": "yes",
         "RX 7900 GRE": "no",
         "RX 7800 XT": "no",
         "RX 7700 XT": "no"
