@@ -50,5 +50,3 @@
 
     Open up prices.html, see the retrieved prices and access the links.<br>  
     ![](https://i.imgur.com/QZONbSQ.png)<br>
-    
-## Notes

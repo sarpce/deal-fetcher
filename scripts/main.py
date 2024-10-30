@@ -14,7 +14,7 @@ class Main:
         self.prices = {}
 
     def read_choices(self):
-        with open('../data/choices.json', 'r') as file:
+        with open('../data/config.json', 'r') as file:
             choices = json.load(file)
 
         chosen_gpus = [

@@ -46,7 +46,8 @@ class Scraper:
 
     def extract_price_geizhals(self, data, keyword):
         lowest_price = None
-        items = data.find_all('span', text=lambda text: text and keyword in text.lower())
+        items = data.find_all(
+            'span', text=lambda text: text and keyword in text.lower())
 
         if not items:
             return None
@@ -55,10 +56,12 @@ class Scraper:
             parent = item.find_parent('a', class_='productlist__link')
             if not parent:
                 continue
-            grandparent = parent.find_parent('h3').find_parent('div').find_parent('div')
+            grandparent = parent.find_parent(
+                'h3').find_parent('div').find_parent('div')
             if not grandparent:
                 continue
-            price_span = grandparent.find('span', class_='gh_price').find('span', class_='notrans')
+            price_span = grandparent.find(
+                'span', class_='gh_price').find('span', class_='notrans')
             if price_span:
                 current_price = self.clean_price_geizhals(price_span.text)
                 if lowest_price is None or current_price < lowest_price:
@@ -87,6 +90,8 @@ class Scraper:
 
     def get_lowest_price(self, keyword, store, html):
         keyword = keyword.lower()
+        if keyword in ["rtx 4060 ti 16gb", "rtx 4060 ti 8gb"]:
+            keyword = "rtx 4060 ti"
         data = self.parse_html(html)
         if store == "mindstar":
             price = self.extract_price_mindstar(data, keyword)
