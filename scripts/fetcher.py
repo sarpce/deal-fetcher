@@ -12,7 +12,7 @@ class Fetcher:
         try:
             self.driver.get(url)
             self.driver.refresh()
-            time.sleep(1)
+            time.sleep(0.5)
             inner_html = self.driver.execute_script(
                 "return document.getElementsByTagName('html')[0].innerHTML")
             return inner_html

@@ -26,8 +26,9 @@ class Scraper:
 
     def extract_price_mindstar(self, data, keyword):
         lowest_price = None
+        keyword_parts = keyword.split()
         items = data.find_all('p', class_='ms_prodname',
-                              text=lambda text: text and keyword in text.lower())
+                              text=lambda text: text and all(part in text.lower() for part in keyword_parts))
 
         if not items:
             return None
@@ -46,8 +47,9 @@ class Scraper:
 
     def extract_price_geizhals(self, data, keyword):
         lowest_price = None
+        keyword_parts = keyword.split()
         items = data.find_all(
-            'span', text=lambda text: text and keyword in text.lower())
+            'span', text=lambda text: text and all(part in text.lower() for part in keyword_parts))
 
         if not items:
             return None
@@ -70,8 +72,9 @@ class Scraper:
 
     def extract_price_mydealz(self, data, keyword):
         lowest_price = None
+        keyword_parts = keyword.split()
         items = data.find_all('a', class_='js-thread-title',
-                              text=lambda text: text and keyword in text.lower())
+                              text=lambda text: text and all(part in text.lower() for part in keyword_parts))
 
         if not items:
             return None
@@ -90,9 +93,6 @@ class Scraper:
 
     def get_lowest_price(self, keyword, store, html):
         keyword = keyword.lower()
-        if keyword in ["rtx 4060 ti 16gb", "rtx 4060 ti 8gb"]:
-            keyword = "rtx 4060 ti"
-        keyword = keyword+' '
         data = self.parse_html(html)
         if store == "mindstar":
             price = self.extract_price_mindstar(data, keyword)
